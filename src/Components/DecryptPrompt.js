@@ -26,7 +26,7 @@ export default function DecryptPrompt({qs}) {
         body: JSON.stringify({ key: qs }),
       };
       try {
-          const fetchResponse = await fetch(`https://private-note-api.herokuapp.com/lookup`, settings);
+          const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/lookup`, settings);
           console.log(fetchResponse);
           const response = await fetchResponse.json();
           setIsValid(response.isValid);
@@ -57,7 +57,7 @@ export default function DecryptPrompt({qs}) {
       body: JSON.stringify({ key: qs }),
     };
     try {
-        const fetchResponse = await fetch(`https://private-note-api.herokuapp.com/decrypt`, settings);
+        const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/decrypt`, settings);
         const response = await fetchResponse.json();
         setMessage(response.message);
         return data;

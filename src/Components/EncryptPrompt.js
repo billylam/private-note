@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -20,8 +20,16 @@ export default function EncryptPrompt() {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    // heroku sleeps api after 30 min
+    const wakeApi = async () => {
+      await fetch(`${process.env.REACT_APP_API_URL}`);
+    }
+    wakeApi();
+  }, [])
+
   const copyLink = () => {
-    navigator.clipboard.writeText(`https://private-note.herokuapp.com/?key=${key}`);
+    navigator.clipboard.writeText(`${process.env.REACT_APP_URL}/?key=${key}`);
     setOpen(true);
   }
 
@@ -48,8 +56,9 @@ export default function EncryptPrompt() {
       body: JSON.stringify({ message: data.get('message') }),
     };
     try {
-        const fetchResponse = await fetch(`https://private-note-api.herokuapp.com/encrypt`, settings);
         setIsLoading(true);
+        console.log(process.env.API_URL);
+        const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/encrypt`, settings);
         const response = await fetchResponse.json();
         setKey(encodeURIComponent(response.key));
         setIsLoading(false);
@@ -90,7 +99,7 @@ export default function EncryptPrompt() {
               name="url"
               autoComplete="email"
               autoFocus
-              value={`https://private-note.herokuapp.com/?key=${key}`}
+              value={`${process.env.REACT_APP_URL}/?key=${key}`}
               InputProps={{
                 endAdornment: 
                   <InputAdornment position="end">
