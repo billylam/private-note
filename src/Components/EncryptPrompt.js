@@ -8,8 +8,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import InputAdornment from '@mui/material/InputAdornment';
-import { Snackbar } from '@mui/material';
-import { Alert } from '@mui/material';
+import { Snackbar, Alert } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -24,14 +23,14 @@ export default function EncryptPrompt() {
     // heroku sleeps api after 30 min
     const wakeApi = async () => {
       await fetch(`${process.env.REACT_APP_API_URL}`);
-    }
+    };
     wakeApi();
-  }, [])
+  }, []);
 
   const copyLink = () => {
     navigator.clipboard.writeText(`${process.env.REACT_APP_URL}/?key=${key}`);
     setOpen(true);
-  }
+  };
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -50,46 +49,46 @@ export default function EncryptPrompt() {
     const settings = {
       method: 'POST',
       headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ message: data.get('message') }),
     };
     try {
-        setIsLoading(true);
-        const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/encrypt`, settings);
-        const response = await fetchResponse.json();
-        setKey(encodeURIComponent(response.key));
-        setIsLoading(false);
-        return data;
+      setIsLoading(true);
+      const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/encrypt`, settings);
+      const response = await fetchResponse.json();
+      setKey(encodeURIComponent(response.key));
+      setIsLoading(false);
     } catch (e) {
-        return e;
-    }    
+      console.log(e);
+    }
   };
 
-  const ui = key ? (<ThemeProvider theme={theme}>
-    <Container component="main" maxWidth="lg">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography component="h1" variant="h5" sx={{ width: 3/4 , mt: 1 }}>
-          Your private note is available at:
-        </Typography>
+  const ui = key ? (
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="lg">
+        <CssBaseline />
         <Box
           sx={{
-            width: 3/4,
-            marginTop: 2,
+            marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
+          <Typography component="h1" variant="h5" sx={{ width: 3 / 4, mt: 1 }}>
+            Your private note is available at:
+          </Typography>
+          <Box
+            sx={{
+              width: 3 / 4,
+              marginTop: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
             <TextField
               margin="normal"
               required
@@ -100,26 +99,26 @@ export default function EncryptPrompt() {
               value={`${process.env.REACT_APP_URL}/?key=${key}`}
               InputProps={{
                 spellCheck: 'false',
-                endAdornment: 
-                  <InputAdornment position="end">
-                    <ContentCopyIcon
-                      aria-label="copy link"
-                      onClick={copyLink}
-                      edge="end"
-                    >
-                    </ContentCopyIcon>
-                  </InputAdornment>
+                endAdornment:
+      <InputAdornment position="end">
+        <ContentCopyIcon
+          aria-label="copy link"
+          onClick={copyLink}
+          edge="end"
+        />
+      </InputAdornment>,
               }}
             />
+          </Box>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+              Copied to clipboard!
+            </Alert>
+          </Snackbar>
         </Box>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-            Copied to clipboard!
-          </Alert>
-        </Snackbar>
-      </Box>
-    </Container>
-  </ThemeProvider>) : (
+      </Container>
+    </ThemeProvider>
+  ) : (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="lg">
         <CssBaseline />
@@ -134,7 +133,7 @@ export default function EncryptPrompt() {
           <Typography component="h1" variant="h5">
             Create a private note
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: 3/4 , mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: 3 / 4, mt: 1 }}>
             <TextField
               multiline
               rows="6"
@@ -156,14 +155,15 @@ export default function EncryptPrompt() {
             </Button>
           </Box>
           <Backdrop
-            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={isLoading}>
+            sx={{ color: '#fff', zIndex: (t) => t.zIndex.drawer + 1 }}
+            open={isLoading}
+          >
             <CircularProgress color="inherit" />
           </Backdrop>
         </Box>
       </Container>
     </ThemeProvider>
-  )
+  );
 
   return ui;
 }

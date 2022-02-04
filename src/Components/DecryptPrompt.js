@@ -9,34 +9,32 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme();
 
-export default function DecryptPrompt({qs}) {
+export default function DecryptPrompt({ qs }) {
   const [message, setMessage] = useState('');
   const [isValid, setIsValid] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  // const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       const settings = {
         method: 'POST',
         headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ key: qs }),
       };
       try {
-          const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/lookup`, settings);
-          const response = await fetchResponse.json();
-          setIsValid(response.isValid);
-          setErrorMessage(response.error);
+        const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/lookup`, settings);
+        const response = await fetchResponse.json();
+        setIsValid(response.isValid);
+        setErrorMessage(response.error);
       } catch (e) {
-          console.log(e)
-          return e;
-      }   
+        console.log(e);
+      }
     }
     fetchData();
-  }, [])
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -45,99 +43,105 @@ export default function DecryptPrompt({qs}) {
     const settings = {
       method: 'POST',
       headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ key: qs }),
     };
     try {
-        const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/decrypt`, settings);
-        const response = await fetchResponse.json();
-        setMessage(response.message);
-        return data;
+      const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/decrypt`, settings);
+      const response = await fetchResponse.json();
+      setMessage(response.message);
+      return data;
     } catch (e) {
-        return e;
-    }    
+      return e;
+    }
   };
 
   let ui;
-  if (!isValid) ui = <ThemeProvider theme={theme}>
-  <Container component="main" maxWidth="lg">
-    <CssBaseline />
-    <Box
-      sx={{
-        marginTop: 8,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <Typography component="h1" variant="h5">
-        {errorMessage}
-      </Typography>
-    </Box>
-  </Container>
-</ThemeProvider>;
-
-else if (message) ui = <ThemeProvider theme={theme}>
-<Container component="main" maxWidth="lg">
-  <CssBaseline />
-  <Box
-    sx={{
-      marginTop: 8,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    }}
-  >
-    <Typography component="h1" variant="h5">
-      
-    </Typography>
-    <Box sx={{ width: 3/4 , mt: 1, color: 'black' }}>
-            <TextField
-              multiline
-              rows="6"
-              margin="normal"
-              required
-              fullWidth
-              id="message"
-              label="Your private note"
-              name="message"
-              autoFocus
-              value={message}
-            />
+  if (!isValid) {
+    ui = (
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="lg">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Typography component="h1" variant="h5">
+              {errorMessage}
+            </Typography>
           </Box>
-  </Box>
-</Container>
-</ThemeProvider>;
-   
-    else ui = <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="lg">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            Are you ready to reveal this private note?
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: 3/4 , mt: 1 }}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              REVEAL!
-            </Button>
+        </Container>
+      </ThemeProvider>
+    );
+  } else if (message) {
+    ui = (
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="lg">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Typography component="h1" variant="h5" />
+            <Box sx={{ width: 3 / 4, mt: 1, color: 'black' }}>
+              <TextField
+                multiline
+                rows="6"
+                margin="normal"
+                required
+                fullWidth
+                id="message"
+                label="Your private note"
+                name="message"
+                autoFocus
+                value={message}
+              />
+            </Box>
           </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>;
+        </Container>
+      </ThemeProvider>
+    );
+  } else {
+    ui = (
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="lg">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Typography component="h1" variant="h5">
+              Are you ready to reveal this private note?
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: 3 / 4, mt: 1 }}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                REVEAL!
+              </Button>
+            </Box>
+          </Box>
+        </Container>
+      </ThemeProvider>
+    );
+  }
 
   return ui;
 }

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import './App.css';
-import EncryptPrompt from './Components/EncryptPrompt';
-import DecryptPrompt from './Components/DecryptPrompt';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import DecryptPrompt from './Components/DecryptPrompt';
+import EncryptPrompt from './Components/EncryptPrompt';
 
 function App() {
   const getQs = () => {
@@ -14,18 +14,18 @@ function App() {
     return qs;
   };
 
-  const [qs, setQs] = useState(() => getQs());
+  const [qs] = useState(() => getQs());
 
   return (
     <div className="App">
       <header className="App-header">
-      <AppBar position="relative">
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Privates notes
-          </Typography>
-        </Toolbar>
-      </AppBar>
+        <AppBar position="relative">
+          <Toolbar>
+            <Typography variant="h6" color="inherit" noWrap>
+              Privates notes
+            </Typography>
+          </Toolbar>
+        </AppBar>
       </header>
       <div>
         {qs ? <DecryptPrompt qs={qs} /> : <EncryptPrompt />}
