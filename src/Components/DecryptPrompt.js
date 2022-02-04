@@ -27,7 +27,6 @@ export default function DecryptPrompt({qs}) {
       };
       try {
           const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/lookup`, settings);
-          console.log(fetchResponse);
           const response = await fetchResponse.json();
           setIsValid(response.isValid);
           setErrorMessage(response.error);
@@ -36,17 +35,12 @@ export default function DecryptPrompt({qs}) {
           return e;
       }   
     }
-    console.log('hello')
     fetchData();
   }, [])
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      message: data.get('message'),
-    });
 
     const settings = {
       method: 'POST',
@@ -107,7 +101,7 @@ else if (message) ui = <ThemeProvider theme={theme}>
               required
               fullWidth
               id="message"
-              label="Your message"
+              label="Your private note"
               name="message"
               autoFocus
               value={message}

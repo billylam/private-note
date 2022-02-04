@@ -57,7 +57,6 @@ export default function EncryptPrompt() {
     };
     try {
         setIsLoading(true);
-        console.log(process.env.API_URL);
         const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/encrypt`, settings);
         const response = await fetchResponse.json();
         setKey(encodeURIComponent(response.key));
@@ -97,10 +96,10 @@ export default function EncryptPrompt() {
               fullWidth
               id="url"
               name="url"
-              autoComplete="email"
               autoFocus
               value={`${process.env.REACT_APP_URL}/?key=${key}`}
               InputProps={{
+                spellCheck: 'false',
                 endAdornment: 
                   <InputAdornment position="end">
                     <ContentCopyIcon
