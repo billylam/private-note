@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import { Link } from '@mui/material';
 import DecryptPrompt from './Components/DecryptPrompt';
 import EncryptPrompt from './Components/EncryptPrompt';
 
@@ -21,9 +21,9 @@ function App() {
       <header className="App-header">
         <AppBar position="relative">
           <Toolbar>
-            <Typography variant="h6" color="inherit" noWrap>
+            <Link underline="none" variant="h6" color="inherit" noWrap href={process.env.REACT_APP_URL}>
               Privates notes
-            </Typography>
+            </Link>
           </Toolbar>
         </AppBar>
       </header>
