@@ -18,7 +18,7 @@ export default function EncryptPrompt() {
   const [open, setOpen] = useState(false);
 
   const copyLink = () => {
-    navigator.clipboard.writeText(`https://billylam.github.io/private-note/?key=${key}`);
+    navigator.clipboard.writeText(`https://private-note.herokuapp.com/?key=${key}`);
     setOpen(true);
   }
 
@@ -85,7 +85,7 @@ export default function EncryptPrompt() {
               name="url"
               autoComplete="email"
               autoFocus
-              value={`https://billylam.github.io/private-note/?key=${key}`}
+              value={`https://private-note.herokuapp.com/?key=${key}`}
               InputProps={{
                 endAdornment: 
                   <InputAdornment position="end">
