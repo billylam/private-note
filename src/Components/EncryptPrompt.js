@@ -10,12 +10,15 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Snackbar } from '@mui/material';
 import { Alert } from '@mui/material';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const theme = createTheme();
 
 export default function EncryptPrompt() {
   const [key, setKey] = useState(null);
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const copyLink = () => {
     navigator.clipboard.writeText(`https://private-note.herokuapp.com/?key=${key}`);
@@ -46,8 +49,10 @@ export default function EncryptPrompt() {
     };
     try {
         const fetchResponse = await fetch(`https://private-note-api.herokuapp.com/encrypt`, settings);
+        setIsLoading(true);
         const response = await fetchResponse.json();
         setKey(encodeURIComponent(response.key));
+        setIsLoading(false);
         return data;
     } catch (e) {
         return e;
@@ -142,6 +147,11 @@ export default function EncryptPrompt() {
               Encrypt!
             </Button>
           </Box>
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={isLoading}>
+            <CircularProgress color="inherit" />
+          </Backdrop>
         </Box>
       </Container>
     </ThemeProvider>
