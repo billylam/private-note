@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const theme = createTheme();
 
@@ -13,6 +15,15 @@ export default function DecryptPrompt({ qs }) {
   const [message, setMessage] = useState('');
   const [isValid, setIsValid] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // heroku sleeps api after 30 min
+    const wakeApi = async () => {
+      await fetch(`${process.env.REACT_APP_API_URL}`);
+    };
+    wakeApi();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -29,6 +40,7 @@ export default function DecryptPrompt({ qs }) {
         const response = await fetchResponse.json();
         setIsValid(response.isValid);
         setErrorMessage(response.error);
+        setIsLoading(false);
       } catch (e) {
         console.log(e);
       }
@@ -137,6 +149,12 @@ export default function DecryptPrompt({ qs }) {
                 REVEAL!
               </Button>
             </Box>
+            <Backdrop
+              sx={{ color: '#fff', zIndex: (t) => t.zIndex.drawer + 1 }}
+              open={isLoading}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
           </Box>
         </Container>
       </ThemeProvider>
